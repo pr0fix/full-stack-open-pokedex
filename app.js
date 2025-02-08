@@ -1,4 +1,5 @@
-import express, { staticExpress } from 'express'
+import express from 'express'
+const { static: staticExpress } = express
 const app = express()
 
 // get the port from env variable
