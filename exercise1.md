@@ -1,0 +1,9 @@
+Linting a Ruby application can be done with the go-to linter called RuboCop. It enforces the community's style guide and helps maintain consistent formatting, naming conventions, and code organization. It can also be customized to fit the team's preferences.
+
+For testing a Ruby application it is possible to create a matrix strategy to test your application against multiple versions of Ruby. This allows a more thorough test coverage since the developer can see how the application would run on different versions. Tests can be run with RSpec which is the most frequently used testing library for Ruby in production apps.
+
+One of the most used tools for building a linted and tested Ruby application is called Bundler. It provides a consistent environment for Ruby projects by tracking and installing the exact gems and versions that are needed. Gems are simply open source libraries that contain Ruby code and are packaged.
+
+Setting up CI can be done with popular tools like Jenkins and GitHub Actions. Alternatively, one can use platforms and tools such as Pantheon, CircleCI, Travis CI, GitLab, TeamCity, Bamboo, Buddy, Codeship, GoCD and Wercker.
+
+For this setup it would be better to use a cloud-based environment for a CI/CD pipeline. A cloud-based environment takes way less time to set up and get the app running in no time. Since the team consists of only 6 people, and the application is in active development soon to be released, I don't see that there's enough time and resources for a self-hosted CI/CD. If they allocate people from the development team to setup a self-hosted CI/CD it takes resources from the development team which will slow down release. The decision whether to go for a self-hosted or a cloud-based solution depends on the resources already available and the requirements the team has for a CI/CD pipeline.
