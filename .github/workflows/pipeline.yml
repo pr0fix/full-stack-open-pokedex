@@ -9,6 +9,7 @@ on:
       types: [opened, synchronize]
 
 jobs:
+  # workflow to lint, test, build and deploy app to Render
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
     steps:
@@ -32,6 +33,7 @@ jobs:
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
   
+  # workflow to bump repository version & push tag
   tag_release:
     needs: [simple_deployment_pipeline]
     runs-on: ubuntu-20.04
