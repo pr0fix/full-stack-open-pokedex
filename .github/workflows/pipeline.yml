@@ -13,6 +13,7 @@ jobs:
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
     steps:
+      - uses: rjstone/discord-webhook-notify@v1
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
@@ -32,6 +33,20 @@ jobs:
         if: ${{ github.event_name == 'push' }}
       - name: Trigger deployment
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
+      - name: Test Success
+        if: success()
+        with:
+            severity: info
+            text: A new version of Pokedex deployed
+            details: to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+      - name: Test Failure
+        if: failure()
+        with:
+            severity: error
+            text: Build failed
+            details: commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
+            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   
   # workflow to bump repository version & push tag
   tag_release:
