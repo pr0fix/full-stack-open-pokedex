@@ -4,12 +4,11 @@ on:
   push:
     branches:
       - main
-    pull_request:
-      branches: [main]
-      types: [opened, synchronize]
+  pull_request:
+    branches: [main]
+    types: [opened, synchronize]
 
 jobs:
-  # workflow to lint, test, build and deploy app to Render
   simple_deployment_pipeline:
     runs-on: ubuntu-20.04
     steps:
@@ -17,37 +16,46 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+
       - name: Install dependencies
         run: npm install
+
       - name: Run linter
         run: npm run eslint
+
       - name: Run build
         run: npm run build
+
       - name: Run unit-tests
         run: npm run test
+
       - name: Install Playwright Browsers
         run: npx playwright install --with-deps
+      
       - name: Run e2e-tests
         run: npm run test:e2e
-        if: ${{ github.event_name == 'push' }}
+
       - name: Trigger deployment
+        if: ${{ github.event_name == 'push' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      - name: Test Success
+      
       - uses: rjstone/discord-webhook-notify@v1
-        if: success()
+      - name: The job has succeeded
+        if: ${{ success() }}
         with:
-            severity: info
-            text: A new version of Pokedex deployed
-            details: to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-      - name: Test Failure
+          severity: info
+          text: A new version of Pokedex deployed
+          details: to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
       - uses: rjstone/discord-webhook-notify@v1
-        if: failure()
+      - name: The job has failed
+        if: ${{ failure() }}
         with:
-            severity: error
-            text: Build failed
-            details: commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
-            webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+          severity: error
+          text: Build failed
+          details: commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   
   # workflow to bump repository version & push tag
   tag_release:
