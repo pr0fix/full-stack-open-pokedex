@@ -62,14 +62,14 @@ jobs:
         if: success()
         with:
           severity: info
-          text: A new version of Pokedex deployed
-          details: to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}
+          text: 'A new version of Pokedex deployed'
+          details: 'to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}''
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
       - uses: rjstone/discord-webhook-notify@v1
         if: failure()
         with:
           severity: error
-          text: Build failed
-          details: commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
+          text: 'Build failed'
+          details: 'commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :('
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
