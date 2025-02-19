@@ -38,24 +38,6 @@ jobs:
       - name: Trigger deployment
         if: ${{ github.event_name == 'push' }}
         run: curl https://api.render.com/deploy/srv-${{ secrets.RENDER_SERVICE_ID }}?key=${{ secrets.RENDER_API_KEY }}
-      
-      - uses: rjstone/discord-webhook-notify@v1
-        name: The job has succeeded
-        if: ${{ success() }}
-        with:
-          severity: info
-          text: A new version of Pokedex deployed
-          details: to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
-
-      - uses: rjstone/discord-webhook-notify@v1
-        name: The job has failed
-        if: ${{ failure() }}
-        with:
-          severity: error
-          text: Build failed
-          details: commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
-          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
   
   # workflow to bump repository version & push tag
   tag_release:
@@ -70,3 +52,24 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
+  
+  # workflow to send notification to discord about deployment
+  discord_notification:
+    needs: [tag_release]
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: rjstone/discord-webhook-notify@v1
+        if: ${{ success() }}
+        with:
+          severity: info
+          text: A new version of Pokedex deployed
+          details: to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
+
+      - uses: rjstone/discord-webhook-notify@v1
+        if: ${{ failure() }}
+        with:
+          severity: error
+          text: Build failed
+          details: commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
+          webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
