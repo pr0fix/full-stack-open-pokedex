@@ -63,7 +63,7 @@ jobs:
         with:
           severity: info
           text: 'A new version of Pokedex deployed'
-          details: 'to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}''
+          details: 'to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}'
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
         if: ${{ failure() }}
