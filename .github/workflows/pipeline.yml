@@ -45,7 +45,7 @@ jobs:
         with:
           severity: info
           text: A new version of Pokedex deployed
-          details: 'to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}'
+          description: to https://full-stack-open-pokedex-dc3x.onrender.com by ${{ github.actor }}
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
       - name: Discord webhook (failure)
@@ -54,7 +54,7 @@ jobs:
         with:
           severity: error
           text: Build failed
-          details: 'commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :('
+          description: commit ${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }} by ${{ github.actor }} broke the build :(
           webhookUrl: ${{ secrets.DISCORD_WEBHOOK }}
 
   # workflow to bump repository version & push tag
